@@ -1,0 +1,3 @@
+# These are application-owned SQL Server scripts and stylesheet.
+database/*.sql linguist-language=TSQL linguist-detectable=true
+src/Pitwall/wwwroot/app.css linguist-generated=false linguist-vendored=false linguist-detectable=true
