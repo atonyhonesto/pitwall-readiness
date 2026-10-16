@@ -16,10 +16,13 @@
 
 The first SQL integration run rejected direct OUTPUT INTO an audit table with a foreign key. The implementation now captures changed rows into a table variable and inserts audit records within an explicit transaction, preserving the foreign key. All five tests passed after the fix.
 
-## Not yet confirmed
+## GitHub publication and hosted checks
 
-- Hosted GitHub Actions has not run. The SQL Server 2022 container job is defined but local tests used SQL Server 2025 LocalDB.
-- GitHub repository creation/push: pending account connection. Requested destination name: `pitwall-readiness`, **private**.
+- Published to [atonyhonesto/pitwall-readiness](https://github.com/atonyhonesto/pitwall-readiness), confirmed **private**.
+- Hosted build/unit and SQL Server 2022 integration checks passed before history cleanup. See Actions for current runs.
+
+## Remaining limits
+
 - Full accessibility audit, database-outage browser exercise, and production deployment checks remain outside the executed checks above.
 
 The application is a local portfolio demo with no authentication or verified audit actor. See the README deployment boundary before hosting.

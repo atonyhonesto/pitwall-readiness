@@ -4,22 +4,22 @@ permissions:
   contents: read
 jobs:
   unit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.0.x
       - run: dotnet restore Pitwall.sln
       - run: dotnet build Pitwall.sln -c Release --no-restore -warnaserror
       - run: dotnet test Pitwall.sln -c Release --no-build --filter 'Category!=SqlIntegration' --logger trx
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: unit-results
           path: '**/TestResults/*.trx'
   sql-integration:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     services:
       sql:
         image: mcr.microsoft.com/mssql/server:2022-latest
@@ -34,8 +34,8 @@ jobs:
     env:
       PITWALL_TEST_SQL: 'Server=localhost,1433;Database=Pitwall;User Id=sa;Password=Ci-Only_Pitwall42!;TrustServerCertificate=True'
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 8.0.x
       - name: Initialize isolated database
@@ -47,8 +47,9 @@ jobs:
           docker exec "$SQL_CONTAINER" /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Ci-Only_Pitwall42!' -C -b -d Pitwall -i /tmp/pitwall/001-schema.sql
           docker exec "$SQL_CONTAINER" /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Ci-Only_Pitwall42!' -C -b -d Pitwall -i /tmp/pitwall/002-seed.sql
       - run: dotnet test Pitwall.sln -c Release --filter 'Category=SqlIntegration' --logger trx
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: always()
         with:
           name: sql-results
           path: '**/TestResults/*.trx'
+
